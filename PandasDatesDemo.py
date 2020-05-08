@@ -22,52 +22,48 @@ print('Pandas Version:', pd.__version__)
 
 ''' Daily Atlantic Oscillation (AO) '''
 
-
-ao = np.loadtxt('monthly.ao.index.b50.current.ascii')					# load data
+# load data
+ao = np.loadtxt('monthly.ao.index.b50.current.ascii')					
 # print(ao)
 # print('Rows, Columns:', ao.shape)
 
-
-dates = pd.date_range('1950-01', periods=ao.shape[0], freq='M')			# Generate Dates
+# Generate Dates
+dates = pd.date_range('1950-01', periods=ao.shape[0], freq='M')			
 AO = Series(ao[:,2], index=dates)
 # print('Dates:', dates.shape[0])
 # print(AO)
 
-
-AO.plot(title='AO plot')												# Generate Daily Atlantic Oscillation (AO) plot
+# Generate Daily Atlantic Oscillation (AO) plot
+AO.plot(title='AO plot')												
 plt.ylabel('AO')
 plt.xlabel('Year')
-plt.show()
-# AO['1980-05':'1981-03'].plot()
-# AO['1980':'1990'].plot()
-# print(AO['1960'])
-
-
+plt.savefig('Tut_[23]_AO_plot.png')
+plt.close() 
 
 
 ''' Daily North Atlantic Oscillation (NAO) '''
 
-
-nao = np.loadtxt('norm.nao.monthly.b5001.current.ascii')				# load data
+# load data
+nao = np.loadtxt('norm.nao.monthly.b5001.current.ascii')				
 dates_nao = pd.date_range('1950-01', periods=nao.shape[0], freq='M')
 NAO = Series(nao[:,2], index=dates_nao)
 # print(NAO.index)
 
-	
-aonao = DataFrame({'AO' : AO, 'NAO' : NAO})								# creating a dataframe from both AO and NAO
-# print(aonao)
+# creating a dataframe from both AO and NAO
+aonao = DataFrame({'AO' : AO, 'NAO' : NAO})								
 
 # plotting both NAO and AO
-# plt.figure()
+# plt.figure	plt.savefig('Coeff_Var_both.png', dpi = 96)
+	# plt.close() ()
 # aonao.plot(subplots=True)
 # plt.show()
 
-
-aonao['Diff'] = aonao['AO'] - aonao['NAO']								# adding new column
+# adding new column
+aonao['Diff'] = aonao['AO'] - aonao['NAO']								
 print(aonao.head())
 
-
-del aonao['Diff']														# deleting column
+# deleting column
+del aonao['Diff']														
 print(aonao.tail())
 
 
@@ -80,33 +76,21 @@ print('\nMean(1):\n',aonao.mean(1))
 print('\nDescribe:\n',aonao.describe())
 
 
-# Resampling Mean
-# AO_mm = AO.resample("A").mean()
-# plt.figure()
-# AO_mm.plot(style='g--')
-# plt.show()
-
-
 '''Resampling Median'''
 AO_mm = AO.resample("A").median()
 AO_mm.plot(title='Resampled Median')
 plt.ylabel('AO_mm')
 plt.xlabel('Year')
-plt.show()
+plt.savefig('Tut_[48]_AO_mm.png')
+plt.close() 
 
-# Resampling multiple plots
-# AO_mm = AO.resample("A").apply(['mean', np.min, np.max])
-# AO_mm['1900':'2020'].plot(subplots=True)
-# plt.show()
-# AO_mm['1900':'2020'].plot()
-# plt.show()
-# print(AO_mm)
 
 '''Rolling Statistics'''
-aonao.rolling(window=12, center=False).mean().plot(title='Rolling Mean', style='-')
+aonao.rolling(window=12, center=False).mean().plot(title='Rolling Mean', style='-g')
 plt.ylabel('Rolling Mean')
 plt.xlabel('Year')
-plt.show()
+plt.savefig('Tut_[52]_rolling_mean.png')
+plt.close() 
 
 
 
